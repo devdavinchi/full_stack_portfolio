@@ -1,1 +1,23 @@
 
+*{
+	
+	background:deepskyblue;
+	width:800px;
+
+
+}
+
+form{
+	display:flex;
+	justify-content: center;
+	flex-direction:column;
+	width:1000px;
+	height:auto;
+	border:2px black solid;
+	padding:20px;
+}
+
+form #Name{
+border:none;
+
+}
