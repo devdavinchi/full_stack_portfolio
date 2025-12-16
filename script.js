@@ -1,68 +1,45 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const video = document.getElementById('hero-video');
-  const videoBtn = document.getElementById('toggle-video');
+// Background video auto controls handled by HTML autoplay
 
-  videoBtn.addEventListener('click', () => {
-    if (video.paused) {
-      video.play();
-      videoBtn.textContent = 'Pause Video';
-    } else {
-      video.pause();
-      videoBtn.textContent = 'Play Video';
-    }
+// Drawing board
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let drawing = false;
+let color = "#ffffff";
+
+canvas.addEventListener("mousedown", () => (drawing = true));
+canvas.addEventListener("mouseup", () => (drawing = false));
+canvas.addEventListener("mousemove", draw);
+
+function draw(e) {
+  if (!drawing) return;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(e.offsetX, e.offsetY, 5, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// Color buttons
+const colorBtns = document.querySelectorAll(".clr");
+colorBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    color = btn.dataset.c;
   });
+});
 
+// Clear canvas
+const clearBtn = document.getElementById("clearCanvas");
+clearBtn.addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
 
-  // Handle Audio Play/Pause Here
+// Buttons
+const downloadBtn = document.querySelector(".download");
+const gitBtn = document.querySelector(".git");
 
-  const canvas = document.getElementById('drawing-canvas');
-  const ctx = canvas.getContext('2d');
-  let isDrawing = false;
-  let currentColor = '#000000';
+downloadBtn.addEventListener("click", () => {
+  window.location.href = "your-cv.pdf";
+});
 
-  document.querySelectorAll('.color-picker button').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      currentColor = e.target.dataset.color;
-      ctx.strokeStyle = currentColor;
-    });
-  });
-
-  canvas.addEventListener('mousedown', (e) => {
-    isDrawing = true;
-    ctx.beginPath();
-    ctx.moveTo(e.offsetX, e.offsetY);
-  });
-
-  canvas.addEventListener('mousemove', (e) => {
-    if (isDrawing) {
-      ctx.lineWidth = 6;
-      ctx.lineCap = 'round';
-      ctx.strokeStyle = currentColor;
-      ctx.lineTo(e.offsetX, e.offsetY);
-      ctx.stroke();
-    }
-  });
-
-  canvas.addEventListener('mouseup', () => isDrawing = false);
-  canvas.addEventListener('mouseout', () => isDrawing = false);
-
-
-  document.getElementById('clear-canvas').addEventListener('click', () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  });
-
-
-  let cardCount = 7;
-
-  // Create a separate function for Event Handler
-
-  document.getElementById('add-card').addEventListener('click', () => {
-    const container = document.querySelector('.grid-container');
-    const newCard = document.createElement('div');
-    newCard.className = 'card';
-    newCard.innerHTML = `Card ${cardCount}<br><small>Added dynamically!</small>`;
-    container.appendChild(newCard);
-    cardCount++;
-  });
-
+gitBtn.addEventListener("click", () => {
+  window.open("https://github.com/", "_blank");
 });
